@@ -1,0 +1,6 @@
+.env
+.venv/
+/data/
+*.db
+.ipynb_checkpoints/
+__pycache__/
