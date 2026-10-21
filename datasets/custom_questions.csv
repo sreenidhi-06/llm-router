@@ -1,0 +1,16 @@
+domain,subject,question,option_a,option_b,option_c,option_d,answer
+programming,python,"What is the output of: x = [1, 2, 3]; y = x; y.append(4); print(x)","[1, 2, 3]","[1, 2, 3, 4]","Error","None",B
+programming,python,"What does len({1, 2, 2, 3}) return?","4","2","Error","3",D
+programming,java,"Which keyword prevents a class from being subclassed in Java?","static","private","final","abstract",C
+programming,java,"What is the default value of an int instance variable in Java?","0","null","undefined","-1",A
+programming,c,"What does sizeof(char) always evaluate to in C?","1","2","4","It depends on the compiler",A
+programming,c,"Which C function allocates memory dynamically?","alloc()","new","create()","malloc()",D
+it_helpdesk,networking,"A user cannot open any website but can ping 8.8.8.8 successfully. What is the most likely cause?","Faulty network cable","Disabled network adapter","DNS resolution failure","Incorrect subnet mask",C
+it_helpdesk,security,"A user clicked a link in a suspected phishing email. What should the helpdesk do first?","Delete the email only","Ask the user to forward it to colleagues","Isolate the device and report to the security team","Reinstall the operating system",C
+data_analytics,sql,"Which SQL clause filters groups after aggregation?","WHERE","GROUP BY","ORDER BY","HAVING",D
+data_analytics,pandas,"Which pandas function joins two DataFrames on a key column, like a SQL join?","merge","concat","stack","melt",A
+data_analytics,pipelines,"A pipeline job is accidentally run twice and creates duplicate rows. Which design property prevents this?","Normalization","Idempotency","Sharding","Caching",B
+data_analytics,dashboards,"Which chart best shows monthly revenue trend over two years?","Pie chart","Scatter plot","Line chart","Histogram",C
+finance_ops,finance,"How is gross profit margin calculated?","(Revenue - COGS) / Revenue","(Revenue - Expenses) / Expenses","Net income / Total assets","COGS / Revenue",A
+finance_ops,invoicing,"An invoice has the payment terms 'Net 30'. What does this mean?","A 30% discount applies","The invoice is valid for 30 items","Payment is due in 30 hours","Payment is due within 30 days of the invoice date",D
+finance_ops,kpis,"Which KPI measures the average number of days to collect payment after a sale?","Inventory turnover","Days sales outstanding (DSO)","Gross margin","Customer churn",B
