@@ -7,10 +7,9 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 DB = ROOT / "data" / "router.db"
 
-# List prices in USD per 1 million tokens: (input, output).
-# Placeholders from memory: verify on the Groq pricing page before quoting them.
-# They are only used to estimate cost, since the free tier charges nothing.
-PRICES = {"cheap": (0.075, 0.30), "strong": (0.15, 0.60)}
+# USD per 1M tokens (input, output). cheap = stand-in price for a small 7-8B model
+# (Llama 3.1 8B Instant); strong = gpt-oss-120b. Confirm in the Groq console docs.
+PRICES = {"cheap": (0.05, 0.08), "strong": (0.15, 0.60)}
 
 
 def grade_letter(reply, gold):
