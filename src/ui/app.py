@@ -42,7 +42,7 @@ def show(a, strong_cost=None):
     st.subheader(LABELS[a["tier"]])
     st.caption(a["model"])
     c1, c2, c3 = st.columns(3)
-    c1.metric("Cost", f"${a['cost_usd']:.6f}")
+    c1.metric("Cost / 1k asks", f"${a['cost_usd'] * 1000:.3f}")
     c2.metric("Latency", f"{a['latency_s']:.2f}s")
     c3.metric("Tokens", a["prompt_tokens"] + a["completion_tokens"])
     if strong_cost:

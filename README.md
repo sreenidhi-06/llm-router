@@ -9,7 +9,23 @@ Work in progress. Week 1: project setup, data collection, and EDA.
 Python, pandas, SQLite, scikit-learn, sentence-transformers, FastAPI, LangGraph, Streamlit.
 
 ## How to run
-Instructions will be added as the project develops.
+## How to run
+```bat
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt
+```
+Copy `.env.example` to `.env` and add your Groq API key (free tier).
+
+```bat
+python src\data\ingest.py                                  :: build the questions table
+python src\labeling\run_models.py --n 700 --tiers cheap,mid,strong
+python src\labeling\grade.py                               :: grade the replies
+python -m uvicorn --app-dir src\api main:app               :: start the API (terminal 1)
+python -m streamlit run src\ui\app.py                      :: start the answerboard (terminal 2)
+```
+
+![Answerboard](reports/figures/answerboard.png)
 
 ## Data
 ## Data
