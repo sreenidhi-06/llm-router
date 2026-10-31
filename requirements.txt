@@ -8,3 +8,5 @@ ipykernel
 python-dotenv
 scikit-learn
 streamlitgroq
+fastapi
+uvicorn
