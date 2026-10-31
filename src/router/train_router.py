@@ -18,7 +18,8 @@ pd.set_option("display.width", 200)
 pd.set_option("display.max_columns", None)
 
 ROOT = Path(__file__).resolve().parents[2]
-NUMERIC = ["prompt_chars", "word_count", "n_digits", "n_lines", "has_dollar"]
+NUMERIC = ["prompt_chars", "word_count", "n_digits", "n_lines", "has_dollar",
+           "n_numbers", "n_sentences", "has_not", "has_math_sym"]
 FEATURES = ["prompt"] + NUMERIC
 
 
@@ -29,6 +30,11 @@ def load():
     df["n_digits"] = df.prompt.str.count(r"\d")
     df["n_lines"] = df.prompt.str.count("\n") + 1
     df["has_dollar"] = df.prompt.str.contains(r"[$€£]").astype(int)
+    df["n_numbers"] = df.prompt.str.count(r"\b\d+(?:\.\d+)?\b")
+    df["n_sentences"] = df.prompt.str.count(r"[.!?](?:\s|$)")
+    df["has_not"] = df.prompt.str.contains(r"\b(?:NOT|EXCEPT|least|incorrect)\b",
+                                           case=False).astype(int)
+    df["has_math_sym"] = df.prompt.str.contains(r"[=+\-*/^<>]").astype(int)
     bucket = df.query_id % 10          # fixed split: 60% train, 20% val, 20% test
     df["split"] = np.where(bucket < 6, "train", np.where(bucket < 8, "val", "test"))
     df["y"] = df.cheap_correct.astype(int)   # 1 = the cheap model answered correctly
@@ -43,14 +49,19 @@ def make_model(clf):
 
 
 def sweep(d, p):
+    c_acc, s_acc = d.cheap_correct.mean(), d.strong_correct.mean()
+    c_cost, s_cost = d.cheap_cost.sum(), d.strong_cost.sum()
     rows = []
     for t in np.arange(0.3, 0.96, 0.05):
         use_cheap = p >= t
         acc = np.where(use_cheap, d.cheap_correct, d.strong_correct).mean()
         cost = np.where(use_cheap, d.cheap_cost, d.strong_cost).sum()
+        frac = (cost - c_cost) / (s_cost - c_cost)
+        random_acc = c_acc + frac * (s_acc - c_acc)   # random mix of the two models at the same cost
         rows.append({"threshold": round(t, 2), "cheap_share": round(use_cheap.mean(), 2),
-                     "accuracy": round(acc, 3),
-                     "cost_vs_strong": round(cost / d.strong_cost.sum(), 2)})
+                     "accuracy": round(acc, 3), "cost_vs_strong": round(cost / s_cost, 2),
+                     "random_mix_acc": round(random_acc, 3),
+                     "gain_vs_random": round(acc - random_acc, 3)})
     return pd.DataFrame(rows)
 
 
@@ -83,9 +94,12 @@ def main():
     print("\nvalidation metrics (label = cheap model is correct):")
     print(res.to_string(index=False))
 
-    best = res[res.model != "majority baseline"].sort_values("val_auc").iloc[-1].model
-    print(f"\nthreshold sweep on validation for: {best}")
-    print(sweep(va, probs[best]).to_string(index=False))
+    best = res[res.model != "majority baseline"].sort_values("cv_auc").iloc[-1].model
+    print(f"\nthreshold sweep on validation for: {best} (chosen by cross-validation AUC)")
+    table = sweep(va, probs[best])
+    print(table.to_string(index=False))
+    print(f"\nbest gain over a random mix of the two models: {table.gain_vs_random.max():+.3f} "
+          f"(positive means the router adds value; about 0 means it does not)")
 
     print("\nvalidation baselines:")
     print("  always cheap : accuracy", round(va.cheap_correct.mean(), 3), "| cost_vs_strong",

@@ -9,7 +9,7 @@ DB = ROOT / "data" / "router.db"
 
 # USD per 1M tokens (input, output). cheap = stand-in price for a small 7-8B model
 # (Llama 3.1 8B Instant); strong = gpt-oss-120b. Confirm in the Groq console docs.
-PRICES = {"cheap": (0.05, 0.08), "strong": (0.15, 0.60)}
+PRICES = {"cheap": (0.05, 0.08), "mid": (0.075, 0.30), "strong": (0.15, 0.60)}
 
 
 def grade_letter(reply, gold):

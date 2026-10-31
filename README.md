@@ -24,4 +24,17 @@ Each row has a known correct answer, so model replies can be graded automaticall
 ![EDA overview](reports/figures/eda_overview.png)
 
 ## Results
-Cost versus quality results will be added after evaluation.
+## Results
+Three Groq-hosted tiers were labeled on 700 benchmark questions (list-price cost, relative to the strong model):
+
+| Tier | Model | Accuracy | Cost |
+|---|---|---|---|
+| cheap | allam-2-7b | 58.7% | 0.14 |
+| mid | gpt-oss-20b | 91.6% | 0.43 |
+| strong | gpt-oss-120b | 93.3% | 1.00 |
+
+- The mid model delivers 98% of the strong model's accuracy at 43% of the cost; the accuracy gap is not statistically significant on this sample.
+- Routers using only question text, or the cheap model's answer, did not beat random mixing (cross-validated AUC about 0.56).
+- A perfect (oracle) router would reach 93.7% accuracy at 28% of the strong cost, showing the headroom for better difficulty prediction.
+
+![Cost vs accuracy](reports/figures/tier_frontier.png)
